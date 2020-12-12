@@ -53,6 +53,7 @@ def decide_game_result(server_choice, client_choice):
         elif client_choice in ['paper', 'lizard']:
             return -1
 
+
 def digest_client_request(conn, addr, client_request):
     if client_request["type"] == "player game choice":
         client_choice = client_request["message"].strip().lower()
@@ -60,7 +61,16 @@ def digest_client_request(conn, addr, client_request):
         options = ['rock', 'paper', 'scissors', 'lizard', 'spock']
         server_choice = random.choice(options)
         game_result = decide_game_result(server_choice, client_choice)
+        if game_result == 1:
+            msg = "You lost! "
+        elif game_result == -1:
+            msg = "You won! "
+        elif game_result == 0:
+            msg = "It's a tie! "
 
+        msg += f"Server chose {server_choice}, you chose {client_choice}."
+        resp = create_response("game result", msg)
+        conn.send(resp)
 
 def handle_client(conn, addr):
     print(f"[SERVER] {addr} connected.")
