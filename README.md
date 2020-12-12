@@ -1,6 +1,8 @@
-# PythonProjectFII
+# Rock - Paper - Scissors - Lizard - Spock
+Clip de prezentare: 
+[https://youtu.be/kuCz68HmBsQ](https://youtu.be/kuCz68HmBsQ)
 
-Name: Rock - Paper - Scrissors - Lizard - Spock
+![reguli](https://upload.wikimedia.org/wikipedia/en/c/cc/Rock_paper_scissors_lizard_spock.png)
 
 ID:20
 
