@@ -25,7 +25,7 @@ def send_message_handler():
     while connected:
         try:
             command = input()
-
+            send_message(command)
             # verificam daca avem de a face cu un request de disconnect
             if check_disconnect_request(command):
                 return
@@ -61,7 +61,7 @@ def receive_message_handler():
             return
         print('Raw message: ', msg)
 
-        msg = eval(msg)
+        # msg = eval(msg)
 
 
 # facem un thread care primeste mesaje de la server

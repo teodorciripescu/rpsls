@@ -21,12 +21,17 @@ def handle_client(conn, addr):
         msg = conn.recv(1024).decode(FORMAT)
 
         if msg:
-            msg = eval(msg)
+            # msg = eval(msg)
             print(f"User({addr[1]}): {msg}")
+            print(connections)
             # conn.send("Msg received".encode(FORMAT))
             if msg == DISCONNECT_MESSAGE:
                 connected = False
+        else:
+            connected = False
     # inchidem conexiunea
+    print(f'Closing connection with user {addr[1]}...')
+    connections.remove((conn, addr))
     conn.close()
 
 
@@ -36,11 +41,18 @@ def start():
     print(f"[SERVER] Server is listening on {SERVER}:{PORT}")
     while True:
         try:
+
             conn, addr = server.accept()
-            connections.append((conn, addr))
-            thread = threading.Thread(target=handle_client, args=(conn, addr), daemon=True)
-            thread.start()
-            print(f"[SERVER] TOTAL CONNECTIONS: {threading.activeCount() - 1}")
+            # verificam daca mai pot intra si alti playeri
+            if threading.activeCount() - 1 < 3:
+                connections.append((conn, addr))
+                thread = threading.Thread(target=handle_client, args=(conn, addr), daemon=True)
+                thread.start()
+                print(f"[SERVER] TOTAL CONNECTIONS: {threading.activeCount() - 1}")
+            else:
+                print('Max players reached (3 players).')
+                conn.send("The server is full (3 players).".encode(FORMAT))
+                conn.close()
         except:
             print('Sudden interrupt.')
             return
