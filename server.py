@@ -14,6 +14,15 @@ server.bind(ADDR)
 connections = []
 
 
+def create_response(response_type, message):
+    resp = {
+        "type": response_type,
+        "message": message
+    }
+    resp = str(resp).encode(FORMAT)
+    return resp
+
+
 def handle_client(conn, addr):
     print(f"[SERVER] {addr} connected.")
     connected = True
@@ -21,10 +30,8 @@ def handle_client(conn, addr):
         msg = conn.recv(1024).decode(FORMAT)
 
         if msg:
-            # msg = eval(msg)
+            msg = eval(msg)
             print(f"User({addr[1]}): {msg}")
-            # print(len(connections))
-            # conn.send("Msg received".encode(FORMAT))
         else:
             connected = False
     # inchidem conexiunea
@@ -33,13 +40,7 @@ def handle_client(conn, addr):
     conn.close()
 
 
-def create_response(response_type, message):
-    resp = {
-        "type": response_type,
-        "message": message
-    }
-    resp = str(resp).encode(FORMAT)
-    return resp
+
 
 
 def start():

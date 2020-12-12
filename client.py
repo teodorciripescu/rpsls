@@ -11,14 +11,24 @@ ADDR = (SERVER, PORT)
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 connected = True
-
+game_finished = False
+game_won = False
 message = []
 
 
 # functii ce tin de comportamentul aplicatiei cand trimitem comenzi
 
-def send_message(msg):
-    message = str(msg).encode(FORMAT)
+def send_option(option):
+    option = option.strip().lower()
+    options = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+    if not(option in options):
+        print(f"Option is not valid. Try {options}")
+        return
+    req = {
+        "type": "player game choice",
+        "message": option
+    }
+    message = str(req).encode(FORMAT)
     client.send(message)
 
 
@@ -26,7 +36,7 @@ def send_message_handler():
     while connected:
         try:
             command = input()
-            send_message(command)
+            send_option(command)
 
         except:
             print('Sudden interrupt.')
