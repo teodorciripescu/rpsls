@@ -71,6 +71,11 @@ def digest_client_request(conn, addr, client_request):
         msg += f"Server chose {server_choice}, you chose {client_choice}."
         resp = create_response("game result", msg)
         conn.send(resp)
+        stop_game = False
+        if game_result == 1 or game_result == -1:
+            stop_game = True
+        return stop_game
+
 
 def handle_client(conn, addr):
     print(f"[SERVER] {addr} connected.")
@@ -81,7 +86,9 @@ def handle_client(conn, addr):
         if client_request:
             client_request = eval(client_request)
             print(f"User({addr[1]}): {client_request}")
-            digest_client_request(conn, addr, client_request)
+            stop_game = digest_client_request(conn, addr, client_request)
+            if stop_game:
+                connected = False
         else:
             connected = False
     # inchidem conexiunea
