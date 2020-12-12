@@ -1,5 +1,4 @@
 import socket
-import sys
 import threading
 
 PORT = 3300
@@ -50,25 +49,23 @@ def disconnect():
 
 
 # functii ce tin de comportamentul aplicatie in momentul in care primim mesaje/comenzi
-def digest_server_response():
-    pass
 
 
 def receive_message_handler():
     while connected:
-        msg = client.recv(1024).decode(FORMAT)
+        resp = client.recv(1024).decode(FORMAT)
         # if message empty, disconnect
-        if not msg:
+        if not resp:
             print('Client disconnecting...')
             disconnect()
             return
 
-        msg = eval(msg)
-        print('Raw message: ', msg)
-        # if msg["type"] == 'server full':
-        #     print('server full')
-        #     disconnect()
-        #     return
+        resp = eval(resp)
+        print('Raw message: ', resp)
+        if resp['type'] == 'game result':
+            print(resp['message'])
+            if "It's a tie!" in resp['message']:
+                print("Rematch! Submit new choice!")
 
 
 
