@@ -37,11 +37,9 @@ def send_message_handler():
         try:
             command = input()
             send_option(command)
-
         except:
             print('Sudden interrupt.')
             return
-
 
 
 def disconnect():

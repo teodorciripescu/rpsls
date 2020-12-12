@@ -1,5 +1,6 @@
 import socket
 import threading
+import random
 
 # userii vor fi identificati dupa descriptorii de socket
 print(socket.gethostname())
@@ -7,7 +8,7 @@ PORT = 3300
 SERVER = socket.gethostbyname('127.0.0.1')
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
-MAX_CLIENTS = 2
+MAX_CLIENTS = 3
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(ADDR)
@@ -23,24 +24,60 @@ def create_response(response_type, message):
     return resp
 
 
+def decide_game_result(server_choice, client_choice):
+    if server_choice == client_choice:
+        return 0
+    elif server_choice == 'rock':
+        if client_choice in ['scissors', 'lizard']:
+            return 1
+        elif client_choice in ['paper', 'spock']:
+            return -1
+    elif server_choice == 'paper':
+        if client_choice in ['rock', 'spock']:
+            return 1
+        elif client_choice in ['scissors', 'lizard']:
+            return -1
+    elif server_choice == 'scissors':
+        if client_choice in ['paper', 'lizard']:
+            return 1
+        elif client_choice in ['rock', 'spock']:
+            return -1
+    elif server_choice == 'lizard':
+        if client_choice in ['paper', 'spock']:
+            return 1
+        elif client_choice in ['rock', 'scissors']:
+            return -1
+    elif server_choice == 'spock':
+        if client_choice in ['rock', 'scissors']:
+            return 1
+        elif client_choice in ['paper', 'lizard']:
+            return -1
+
+def digest_client_request(conn, addr, client_request):
+    if client_request["type"] == "player game choice":
+        client_choice = client_request["message"].strip().lower()
+        # serverul genereaza random o optiune
+        options = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+        server_choice = random.choice(options)
+        game_result = decide_game_result(server_choice, client_choice)
+
+
 def handle_client(conn, addr):
     print(f"[SERVER] {addr} connected.")
     connected = True
     while connected:
-        msg = conn.recv(1024).decode(FORMAT)
+        client_request = conn.recv(1024).decode(FORMAT)
 
-        if msg:
-            msg = eval(msg)
-            print(f"User({addr[1]}): {msg}")
+        if client_request:
+            client_request = eval(client_request)
+            print(f"User({addr[1]}): {client_request}")
+            digest_client_request(conn, addr, client_request)
         else:
             connected = False
     # inchidem conexiunea
     print(f'Closing connection with user {addr[1]}...')
     connections.remove((conn, addr))
     conn.close()
-
-
-
 
 
 def start():
