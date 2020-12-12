@@ -3,9 +3,9 @@ import socket
 import threading
 
 # userii vor fi identificati dupa descriptorii de socket
-
+print(socket.gethostname())
 PORT = 3300
-SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = socket.gethostbyname('127.0.0.1')
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "-d"
@@ -27,14 +27,14 @@ def handle_client(conn, addr):
             # conn.send("Msg received".encode(FORMAT))
             if msg == DISCONNECT_MESSAGE:
                 connected = False
-                
+
     conn.close()
 
 
 def start():
     print("[SERVER] Server is starting...")
     server.listen()
-    print(f"[SERVER] Server is listening on {SERVER}")
+    print(f"[SERVER] Server is listening on {SERVER}:{PORT}")
     while True:
         try:
             conn, addr = server.accept()
