@@ -2,13 +2,14 @@ import socket
 import threading
 import random
 
-# userii vor fi identificati dupa descriptorii de socket
+# clientii vor fi identificati dupa descriptorii de socket
 print(socket.gethostname())
 PORT = 3300
 SERVER = socket.gethostbyname('127.0.0.1')
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 MAX_CLIENTS = 3
+# AF_INET pentru adrese Internet Protocol v4; SOCK_STREAM pentru TCP
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server.bind(ADDR)
@@ -104,7 +105,7 @@ def start():
     while True:
         try:
             conn, addr = server.accept()
-            # verificam daca mai pot intra si alti playeri
+            # verificam daca mai pot intra si alti clienti
             if threading.activeCount() - 1 < MAX_CLIENTS:
                 connections.append((conn, addr))
                 thread = threading.Thread(target=handle_client, args=(conn, addr), daemon=True)

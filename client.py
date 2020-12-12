@@ -3,20 +3,16 @@ import threading
 
 PORT = 3300
 FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "-d"
 SERVER = socket.gethostbyname('127.0.0.1')
 ADDR = (SERVER, PORT)
-
+# AF_INET pentru adrese Internet Protocol v4; SOCK_STREAM pentru TCP
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 connected = True
-game_finished = False
-game_won = False
 message = []
 
 
-# functii ce tin de comportamentul aplicatiei cand trimitem comenzi
-
+# functii ce tin de comportamentul aplicatiei cand trimitem optiunile de joc
 def send_option(option):
     option = option.strip().lower()
     options = ['rock', 'paper', 'scissors', 'lizard', 'spock']
@@ -27,14 +23,16 @@ def send_option(option):
         "type": "player game choice",
         "message": option
     }
-    message = str(req).encode(FORMAT)
-    client.send(message)
+    client_message = str(req).encode(FORMAT)
+    client.send(client_message)
 
 
 def send_message_handler():
     while connected:
         try:
             command = input()
+            if not connected:
+                return
             send_option(command)
         except:
             print('Sudden interrupt.')
@@ -45,16 +43,15 @@ def disconnect():
     global connected
     connected = False
     print('Press RETURN to end execution...')
-    # sys.exit()
 
 
-# functii ce tin de comportamentul aplicatie in momentul in care primim mesaje/comenzi
+# functii ce tin de comportamentul aplicatie in momentul in care primim raspunsuri de la server
 
 
 def receive_message_handler():
     while connected:
         resp = client.recv(1024).decode(FORMAT)
-        # if message empty, disconnect
+        # daca mesajul este gol, ne deconectam
         if not resp:
             print('Client disconnecting...')
             disconnect()
@@ -66,8 +63,6 @@ def receive_message_handler():
             print(resp['message'])
             if "It's a tie!" in resp['message']:
                 print("Rematch! Submit new choice!")
-
-
 
 
 # facem un thread care primeste mesaje de la server
