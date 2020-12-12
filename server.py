@@ -1,4 +1,3 @@
-# server
 import socket
 import threading
 
@@ -27,7 +26,7 @@ def handle_client(conn, addr):
             # conn.send("Msg received".encode(FORMAT))
             if msg == DISCONNECT_MESSAGE:
                 connected = False
-
+    # inchidem conexiunea
     conn.close()
 
 
