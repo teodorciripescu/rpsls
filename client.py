@@ -1,4 +1,5 @@
 import socket
+import sys
 import threading
 
 PORT = 3300
@@ -26,42 +27,42 @@ def send_message_handler():
         try:
             command = input()
             send_message(command)
-            # verificam daca avem de a face cu un request de disconnect
-            if check_disconnect_request(command):
-                return
+
         except:
             print('Sudden interrupt.')
             return
 
 
-def check_disconnect_request(msg):
-    if msg == DISCONNECT_MESSAGE:
-        send_message([msg])
-        disconnect()
-        print('Disconnected.')
-        return True
-    return False
-
 
 def disconnect():
     global connected
     connected = False
+    print('Press RETURN to end execution...')
     # sys.exit()
 
 
 # functii ce tin de comportamentul aplicatie in momentul in care primim mesaje/comenzi
+def digest_server_response():
+    pass
+
 
 def receive_message_handler():
     while connected:
         msg = client.recv(1024).decode(FORMAT)
-
         # if message empty, disconnect
         if not msg:
+            print('Client disconnecting...')
             disconnect()
             return
-        print('Raw message: ', msg)
 
-        # msg = eval(msg)
+        msg = eval(msg)
+        print('Raw message: ', msg)
+        # if msg["type"] == 'server full':
+        #     print('server full')
+        #     disconnect()
+        #     return
+
+
 
 
 # facem un thread care primeste mesaje de la server
