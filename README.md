@@ -1,26 +1,13 @@
 # Rock - Paper - Scissors - Lizard - Spock
-Clip de prezentare: 
+Video Presentation: 
 [https://youtu.be/kuCz68HmBsQ](https://youtu.be/kuCz68HmBsQ)
 
-![reguli](https://upload.wikimedia.org/wikipedia/en/c/cc/Rock_paper_scissors_lizard_spock.png)
+Server-client application that reproduces the game of Rock - Paper - Scrissors - Lizard - Spock. The client will send the option to the server, at which point the server will randomly generate an option and send it to the client if it won or not. It is also possible to connect to the server up to a maximum of 3 clients who can play that game simultaneously. Each plays independently with the server. (eg. if player 1 loses, then the game continues for player 2 and player 3. Next, if player 3 loses, player 2 continues his game with the server until he loses / wins)
 
-ID:20
+INPUT: server.py client.py  
+OUTPUT: The answer to each client - whether they won or not - along with all the options chosen.
 
-Difficulty: B
-
-Propose: ALM
-
-Se va crea o aplicație de tip server-client care va reproduce jocul de Rock - Paper -
-Scrissors - Lizard - Spock. Clientul va trimite opțiunea catre server, moment în care
-serverul va genera random si el o opțiune și ii va transmite clientului dacă a caștigat sau nu.
-De asemenea, trebuie să existe posibilitatea sa se conecteze la server până la maxim 3
-clienți care să poată juca simultan un acel joc. Fiecare joacă independent cu serverul. ( ex.
-Dacă jucatorul 1 pierde, atunci partida se continuă pentru jucatorul 2 și jucatorul 3. În
-continuare, dacă jucatorul 3 pierde, jucătorul 2 își continuă jocul cu serverul până pierde /
-câștigă )
-
-INPUT: server.py
-client.py
-
-OUTPUT: Raspunsul către fiecare client - dacă a castigat sau nu – impreună cu toate
-opțiunile alese.
+Rules:    
+![rules](https://upload.wikimedia.org/wikipedia/en/c/cc/Rock_paper_scissors_lizard_spock.png)
+ 
+  
